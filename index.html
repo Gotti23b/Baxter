@@ -1,59 +1,376 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat Grupal - Baxter</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CYAN // SYSTEM</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    overflow: hidden;
+    background: #05080b;
+    color: #00f6ff;
+    font-family: Consolas, monospace;
+}
+
+canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+}
+
+#app {
+    position: relative;
+    z-index: 2;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.panel {
+    width: min(900px, 92vw);
+    height: min(560px, 82vh);
+    border: 1px solid #00eaff88;
+    background: #071116dd;
+    box-shadow:
+        0 0 40px #00eaff22,
+        inset 0 0 50px #00eaff08;
+    backdrop-filter: blur(12px);
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+}
+
+.top {
+    height: 48px;
+    border-bottom: 1px solid #00eaff33;
+    display: flex;
+    align-items: center;
+    padding: 0 18px;
+    gap: 9px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #00f6ff;
+    box-shadow: 0 0 12px #00f6ff;
+}
+
+.title {
+    margin-left: 8px;
+    font-size: 13px;
+    letter-spacing: 3px;
+}
+
+.content {
+    padding: 30px;
+    height: calc(100% - 48px);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+}
+
+h1 {
+    font-size: clamp(35px, 6vw, 70px);
+    margin: 0;
+    line-height: .9;
+    letter-spacing: -4px;
+    text-shadow: 0 0 25px #00eaff77;
+}
+
+h1 span {
+    color: white;
+}
+
+.subtitle {
+    margin-top: 18px;
+    color: #72aab0;
+    max-width: 400px;
+    line-height: 1.6;
+}
+
+button {
+    margin-top: 25px;
+    padding: 12px 18px;
+    background: transparent;
+    border: 1px solid #00f6ff88;
+    color: #00f6ff;
+    font-family: inherit;
+    cursor: pointer;
+    transition: .2s;
+}
+
+button:hover {
+    background: #00f6ff;
+    color: #001014;
+    box-shadow: 0 0 25px #00f6ff66;
+}
+
+.terminal {
+    border: 1px solid #00eaff33;
+    background: #020607aa;
+    border-radius: 8px;
+    padding: 18px;
+    height: 100%;
+    overflow: hidden;
+}
+
+.term-head {
+    color: #47777d;
+    margin-bottom: 15px;
+}
+
+#line {
+    white-space: pre-wrap;
+    line-height: 1.7;
+    font-size: 13px;
+}
+
+.cursor {
+    display: inline-block;
+    width: 8px;
+    height: 15px;
+    background: #00f6ff;
+    animation: blink .8s infinite;
+}
+
+.scan {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #00f6ff33;
+    animation: scan 5s linear infinite;
+}
+
+@keyframes scan {
+    from { top: 50px; }
+    to { top: 100%; }
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+@media(max-width:700px) {
+    .content {
+        grid-template-columns: 1fr;
+        overflow: auto;
+    }
+
+    .terminal {
+        height: 250px;
+    }
+}
+</style>
 </head>
+
 <body>
-    <div class="chat-container">
-        <!-- Header -->
-        <div class="chat-header">
-            <h1>💬 Chat Grupal</h1>
-            <p class="subtitle">Sin login • Mensajes guardados en JSON</p>
+
+<canvas id="matrix"></canvas>
+
+<div id="app">
+    <div class="panel">
+        <div class="scan"></div>
+
+        <div class="top">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="title">CYAN // UNKNOWN SYSTEM</div>
         </div>
 
-        <!-- Setup Usuario -->
-        <div class="user-setup" id="userSetup">
-            <div class="setup-card">
-                <h2>Bienvenido al Chat</h2>
-                <input 
-                    type="text" 
-                    id="userName" 
-                    placeholder="Escribe tu nombre de usuario"
-                    maxlength="20"
-                >
-                <button onclick="startChat()">Entrar al Chat</button>
-            </div>
-        </div>
+        <div class="content">
 
-        <!-- Chat Principal -->
-        <div class="chat-main" id="chatMain" style="display: none;">
-            
-            <!-- Info Usuario -->
-            <div class="user-info">
-                <span id="userDisplay">Usuario</span>
-                <button class="btn-logout" onclick="logout()">Salir</button>
-            </div>
+            <section>
+                <h1>HELLO<br><span>HUMAN.</span></h1>
 
-            <!-- Mensajes -->
-            <div class="messages" id="messages"></div>
+                <div class="subtitle">
+                    Has encontrado una interfaz que técnicamente
+                    no necesitaba existir.
+                    <br><br>
+                    Pero ahora existe.
+                </div>
 
-            <!-- Input -->
-            <div class="chat-input-area">
-                <input 
-                    type="text" 
-                    id="messageInput" 
-                    placeholder="Escribe un mensaje..."
-                    onkeypress="if(event.key==='Enter') sendMessage()"
-                >
-                <button onclick="sendMessage()" class="btn-send">Enviar</button>
-                <button onclick="downloadJSON()" class="btn-download">📥 Descargar JSON</button>
-            </div>
+                <button onclick="activate()">
+                    [ ACTIVAR SISTEMA ]
+                </button>
+
+                <div id="status"></div>
+            </section>
+
+            <section class="terminal">
+                <div class="term-head">
+                    &gt; SYSTEM.LOG
+                </div>
+
+                <div id="line"></div>
+                <span class="cursor"></span>
+            </section>
+
         </div>
     </div>
+</div>
 
-    <script src="chat.js"></script>
+<script>
+
+// -------------------------
+// TERMINAL
+// -------------------------
+
+const messages = [
+    "> Booting CYAN system...",
+    "> Checking reality...",
+    "> Reality: questionable.",
+    "> Searching for operator...",
+    "> Operator found.",
+    "> Loading unnecessary technology...",
+    "> ████████████████████ 100%",
+    "> System ready."
+];
+
+let i = 0;
+let j = 0;
+
+function typeLine() {
+
+    if (i >= messages.length) return;
+
+    if (j < messages[i].length) {
+
+        document.getElementById("line").textContent +=
+            messages[i][j];
+
+        j++;
+
+        setTimeout(typeLine, 25);
+
+    } else {
+
+        document.getElementById("line").textContent += "\n";
+        i++;
+        j = 0;
+
+        setTimeout(typeLine, 300);
+    }
+}
+
+typeLine();
+
+
+// -------------------------
+// BUTTON
+// -------------------------
+
+function activate() {
+
+    const status = document.getElementById("status");
+
+    status.innerHTML =
+        "<br><span style='color:white'>SYSTEM OVERRIDE ACCEPTED.</span>";
+
+    document.body.style.background =
+        "#001c20";
+
+    setTimeout(() => {
+
+        status.innerHTML +=
+            "<br><span style='color:#00f6ff'>...era mentira xd.</span>";
+
+    }, 1000);
+}
+
+
+// -------------------------
+// PARTICLES
+// -------------------------
+
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
+
+let particles = [];
+
+function resize() {
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+}
+
+resize();
+addEventListener("resize", resize);
+
+for (let i = 0; i < 100; i++) {
+
+    particles.push({
+        x: Math.random() * innerWidth,
+        y: Math.random() * innerHeight,
+        speed: Math.random() * 1.5 + .2,
+        size: Math.random() * 2 + .5
+    });
+
+}
+
+function draw() {
+
+    ctx.fillStyle = "rgba(5,8,11,.15)";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    ctx.fillStyle = "#00eaff";
+
+    particles.forEach(p => {
+
+        ctx.fillRect(
+            p.x,
+            p.y,
+            p.size,
+            p.size
+        );
+
+        p.y += p.speed;
+
+        if (p.y > canvas.height) {
+            p.y = 0;
+            p.x = Math.random() * canvas.width;
+        }
+
+    });
+
+    requestAnimationFrame(draw);
+}
+
+draw();
+
+
+// -------------------------
+// EASTER EGG
+// -------------------------
+
+let clicks = 0;
+
+document.querySelector(".dot").onclick = () => {
+
+    clicks++;
+
+    if (clicks === 5) {
+
+        document.querySelector("h1").innerHTML =
+            "YOU<br><span>FOUND IT.</span>";
+
+        document.querySelector(".subtitle").textContent =
+            "No sé qué encontraste. Pero definitivamente encontraste algo.";
+
+    }
+};
+
+</script>
+
 </body>
 </html>
