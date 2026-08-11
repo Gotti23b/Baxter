@@ -3,130 +3,864 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portal Cósmico</title>
+<title>CYAN // UTILMENTE INÚTIL</title>
 
 <style>
-body{
-    margin:0;
-    overflow:hidden;
-    background:black;
-    font-family:Arial;
+* {
+    box-sizing: border-box;
 }
 
-canvas{
-    position:fixed;
-    inset:0;
+:root {
+    --cyan: #00f6ff;
+    --bg: #03070a;
+    --panel: #071116;
+    --text: #dffcff;
+    --muted: #67949a;
 }
 
-#texto{
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
-    color:white;
-    text-align:center;
-    z-index:10;
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Consolas, monospace;
+    overflow: hidden;
 }
 
-h1{
-    font-size:60px;
-    margin:0;
-    text-shadow:0 0 20px cyan;
+canvas {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
 }
 
-p{
-    opacity:0.8;
+.scanlines {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 3px,
+        rgba(0,246,255,.025) 4px
+    );
 }
 
-button{
-    padding:15px 25px;
-    border:none;
-    background:cyan;
-    color:black;
-    font-weight:bold;
-    cursor:pointer;
-    border-radius:10px;
-    transition:0.3s;
+#app {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 25px;
 }
 
-button:hover{
-    transform:scale(1.1);
-    box-shadow:0 0 30px cyan;
+.window {
+    width: min(1100px, 95vw);
+    height: min(700px, 90vh);
+    background: rgba(5,15,19,.91);
+    border: 1px solid #00f6ff55;
+    border-radius: 16px;
+    box-shadow:
+        0 0 80px #00f6ff0c,
+        inset 0 0 80px #00f6ff05;
+    backdrop-filter: blur(15px);
+    overflow: hidden;
+}
+
+header {
+    height: 52px;
+    border-bottom: 1px solid #00f6ff2b;
+    display: flex;
+    align-items: center;
+    padding: 0 18px;
+    gap: 8px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 12px var(--cyan);
+}
+
+.title {
+    margin-left: 10px;
+    letter-spacing: 3px;
+    font-size: 13px;
+}
+
+.clock {
+    margin-left: auto;
+    color: var(--muted);
+}
+
+main {
+    height: calc(100% - 52px);
+    display: grid;
+    grid-template-columns: 230px 1fr;
+}
+
+.sidebar {
+    border-right: 1px solid #00f6ff20;
+    padding: 18px;
+}
+
+.sidebar h3 {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 2px;
+}
+
+.nav {
+    display: block;
+    width: 100%;
+    margin: 7px 0;
+    padding: 12px;
+    text-align: left;
+    background: transparent;
+    border: 1px solid transparent;
+    color: #8cbec3;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.nav:hover,
+.nav.active {
+    border-color: #00f6ff44;
+    color: var(--cyan);
+    background: #00f6ff08;
+}
+
+.content {
+    padding: 35px;
+    overflow: auto;
+}
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+.hero small {
+    color: #4c929a;
+}
+
+.hero h1 {
+    font-size: clamp(45px, 7vw, 82px);
+    line-height: .85;
+    letter-spacing: -5px;
+    margin: 20px 0;
+    text-shadow: 0 0 30px #00f6ff33;
+}
+
+.hero h1 span {
+    color: white;
+}
+
+.hero p {
+    color: var(--muted);
+    max-width: 600px;
+    line-height: 1.7;
+}
+
+.terminal {
+    margin-top: 35px;
+    border: 1px solid #00f6ff25;
+    background: #020607;
+    padding: 18px;
+    min-height: 180px;
+}
+
+.term-title {
+    color: #477e84;
+    margin-bottom: 12px;
+}
+
+pre {
+    color: #79dce2;
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+.tool {
+    border: 1px solid #00f6ff2b;
+    background: #061014aa;
+    padding: 25px;
+    max-width: 700px;
+}
+
+.tool h2 {
+    margin-top: 0;
+    color: var(--cyan);
+}
+
+.big {
+    font-size: 70px;
+    text-align: center;
+    margin: 35px 0;
+    min-height: 85px;
+}
+
+button,
+input {
+    font: inherit;
+}
+
+.action {
+    padding: 12px 18px;
+    background: #06171b;
+    border: 1px solid #00f6ff66;
+    color: var(--cyan);
+    cursor: pointer;
+}
+
+.action:hover {
+    background: var(--cyan);
+    color: #001014;
+    box-shadow: 0 0 25px #00f6ff55;
+}
+
+input {
+    width: 100%;
+    padding: 13px;
+    background: #020607;
+    color: white;
+    border: 1px solid #00f6ff44;
+    outline: none;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 15px;
+}
+
+.card {
+    padding: 20px;
+    border: 1px solid #00f6ff22;
+    background: #061014aa;
+}
+
+.card strong {
+    color: var(--cyan);
+}
+
+.card p {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+#colorBox {
+    width: 180px;
+    height: 180px;
+    margin: 20px auto;
+    border: 1px solid white;
+}
+
+@media(max-width:700px) {
+    main {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        display: flex;
+        gap: 5px;
+        overflow-x: auto;
+        border-right: none;
+        border-bottom: 1px solid #00f6ff20;
+    }
+
+    .sidebar h3 {
+        display: none;
+    }
+
+    .nav {
+        min-width: 100px;
+    }
+
+    .content {
+        padding: 22px;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
 }
 </style>
 </head>
+
 <body>
 
-<canvas id="c"></canvas>
+<canvas id="space"></canvas>
+<div class="scanlines"></div>
 
-<div id="texto">
-    <h1>🌌 PORTAL</h1>
-    <p>No toques el botón... 👀</p>
-    <button onclick="boom()">Abrir portal</button>
+<div id="app">
+
+<div class="window">
+
+<header>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+
+    <div class="title">
+        CYAN // UTILMENTE INÚTIL
+    </div>
+
+    <div class="clock" id="clock"></div>
+</header>
+
+<main>
+
+<aside class="sidebar">
+
+<h3>SYSTEM</h3>
+
+<button class="nav active" onclick="page('home',this)">
+    ▣ INICIO
+</button>
+
+<button class="nav" onclick="page('tools',this)">
+    ⚙ HERRAMIENTAS
+</button>
+
+<button class="nav" onclick="page('terminal',this)">
+    > TERMINAL
+</button>
+
+<button class="nav" onclick="page('secret',this)">
+    ? ????
+</button>
+
+<h3>STATUS</h3>
+
+<div style="color:#4e7e83;font-size:12px">
+    CPU: haciendo algo<br>
+    RAM: probablemente<br>
+    INTERNET: innecesario<br>
+    UTILIDAD: 3%
 </div>
 
-<script>
-const canvas = document.getElementById("c");
-const ctx = canvas.getContext("2d");
+</aside>
 
-canvas.width = innerWidth;
-canvas.height = innerHeight;
+<section class="content">
+
+<!-- HOME -->
+
+<div id="home" class="page active">
+
+<div class="hero">
+
+<small>PERSONAL UTILITY SYSTEM v∞.1</small>
+
+<h1>
+UTILMENTE<br>
+<span>INÚTIL.</span>
+</h1>
+
+<p>
+Bienvenido a una colección de herramientas
+que técnicamente funcionan, pero nadie sabe
+por qué existen.
+</p>
+
+</div>
+
+<div class="terminal">
+
+<div class="term-title">
+SYSTEM.LOG
+</div>
+
+<pre id="log"></pre>
+
+</div>
+
+</div>
+
+
+<!-- TOOLS -->
+
+<div id="tools" class="page">
+
+<h2>HERRAMIENTAS</h2>
+
+<div class="cards">
+
+<div class="card">
+<strong>🪙 MONEDA CUÁNTICA</strong>
+<p>Dejá que el universo decida.</p>
+<button class="action" onclick="coin()">LANZAR</button>
+<div id="coinResult"></div>
+</div>
+
+<div class="card">
+<strong>🔢 CONTADOR INÚTIL</strong>
+<p>Contá absolutamente nada.</p>
+<div id="counter"
+style="font-size:35px;margin:10px 0">0</div>
+<button class="action" onclick="counter()">+1</button>
+<button class="action" onclick="resetCounter()">RESET</button>
+</div>
+
+<div class="card">
+<strong>🌈 COLOR RANDOM</strong>
+<p>Genera colores que nadie pidió.</p>
+<button class="action" onclick="randomColor()">GENERAR</button>
+<div id="colorBox"></div>
+<div id="hex"
+style="text-align:center"></div>
+</div>
+
+<div class="card">
+<strong>🎲 DECISOR</strong>
+<p>Escribí opciones separadas por coma.</p>
+<input id="options"
+placeholder="pizza, helado, dormir">
+<button class="action" onclick="choose()">DECIDIR</button>
+<div id="choice"></div>
+</div>
+
+</div>
+
+</div>
+
+
+<!-- TERMINAL -->
+
+<div id="terminal" class="page">
+
+<h2>TERMINAL</h2>
+
+<div class="tool">
+
+<div style="color:#568d93">
+CYAN SHELL v0.0.∞
+</div>
+
+<br>
+
+<input
+id="command"
+placeholder="escribí algo..."
+onkeydown="if(event.key==='Enter')runCommand()">
+
+<pre id="terminalOutput">
+Escribí "help" para comenzar.
+</pre>
+
+</div>
+
+</div>
+
+
+<!-- SECRET -->
+
+<div id="secret" class="page">
+
+<div class="tool">
+
+<h2>🔒 ÁREA DESCONOCIDA</h2>
+
+<div class="big" id="secretText">
+???
+</div>
+
+<button class="action"
+onclick="secret()">
+NO TOCAR
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+</div>
+
+
+<script>
+
+// ==========================
+// NAVEGACIÓN
+// ==========================
+
+function page(name, btn){
+
+    document.querySelectorAll(".page")
+        .forEach(x => x.classList.remove("active"));
+
+    document.getElementById(name)
+        .classList.add("active");
+
+    document.querySelectorAll(".nav")
+        .forEach(x => x.classList.remove("active"));
+
+    btn.classList.add("active");
+}
+
+
+// ==========================
+// RELOJ
+// ==========================
+
+function clock(){
+
+    document.getElementById("clock")
+        .textContent =
+        new Date().toLocaleTimeString("es-AR");
+
+}
+
+setInterval(clock,1000);
+clock();
+
+
+// ==========================
+// TERMINAL DE INICIO
+// ==========================
+
+const messages = [
+"> Inicializando CYAN...",
+"> Cargando cosas innecesarias...",
+"> Analizando utilidad...",
+"> Resultado: 3%",
+"> Instalando herramientas...",
+"> Instalación completada.",
+"> Sistema listo."
+];
+
+let line = 0;
+
+function boot(){
+
+    if(line < messages.length){
+
+        document.getElementById("log")
+            .textContent += messages[line] + "\n";
+
+        line++;
+
+        setTimeout(boot,300);
+    }
+
+}
+
+boot();
+
+
+// ==========================
+// MONEDA
+// ==========================
+
+function coin(){
+
+    const result =
+        Math.random() < .5
+        ? "◉ CARA"
+        : "✕ CRUZ";
+
+    document.getElementById("coinResult")
+        .textContent = result;
+
+}
+
+
+// ==========================
+// CONTADOR
+// ==========================
+
+let count = 0;
+
+function counter(){
+
+    count++;
+
+    document.getElementById("counter")
+        .textContent = count;
+
+}
+
+function resetCounter(){
+
+    count = 0;
+
+    document.getElementById("counter")
+        .textContent = 0;
+
+}
+
+
+// ==========================
+// COLOR
+// ==========================
+
+function randomColor(){
+
+    const color =
+        "#" +
+        Math.floor(
+            Math.random()*16777215
+        )
+        .toString(16)
+        .padStart(6,"0");
+
+    document.getElementById("colorBox")
+        .style.background = color;
+
+    document.getElementById("hex")
+        .textContent = color;
+
+}
+
+
+// ==========================
+// DECISOR
+// ==========================
+
+function choose(){
+
+    let input =
+        document.getElementById("options")
+        .value;
+
+    let options =
+        input
+        .split(",")
+        .map(x=>x.trim())
+        .filter(Boolean);
+
+    if(options.length === 0)
+        options = ["hacer nada"];
+
+    const result =
+        options[
+            Math.floor(
+                Math.random()*options.length
+            )
+        ];
+
+    document.getElementById("choice")
+        .textContent =
+        "→ " + result;
+
+}
+
+
+// ==========================
+// TERMINAL
+// ==========================
+
+function runCommand(){
+
+    const input =
+        document.getElementById("command")
+        .value
+        .toLowerCase()
+        .trim();
+
+    const output =
+        document.getElementById("terminalOutput");
+
+    let response = "";
+
+    if(input === "help"){
+
+        response =
+`Comandos disponibles:
+
+help
+clear
+date
+whoami
+matrix
+sudo
+coffee`;
+
+    }
+
+    else if(input === "clear"){
+
+        response = "";
+
+    }
+
+    else if(input === "date"){
+
+        response =
+        new Date().toString();
+
+    }
+
+    else if(input === "whoami"){
+
+        response =
+        "usuario: probablemente vos";
+
+    }
+
+    else if(input === "matrix"){
+
+        response =
+        "Wake up, Neo...";
+
+    }
+
+    else if(input === "sudo"){
+
+        response =
+        "No.";
+
+    }
+
+    else if(input === "coffee"){
+
+        response =
+        "☕ Café virtual preparado.";
+
+    }
+
+    else {
+
+        response =
+        "comando desconocido: " + input;
+
+    }
+
+    output.textContent = response;
+
+}
+
+
+// ==========================
+// SECRET
+// ==========================
+
+let secretClicks = 0;
+
+function secret(){
+
+    secretClicks++;
+
+    const text =
+        document.getElementById("secretText");
+
+    if(secretClicks < 3){
+
+        text.textContent =
+            "¿Estás seguro?";
+
+    }
+
+    else if(secretClicks < 6){
+
+        text.textContent =
+            "Te dije que no.";
+
+    }
+
+    else {
+
+        text.textContent =
+            "🎉 ENCONTRASTE EL BOTÓN INÚTIL.";
+
+    }
+
+}
+
+
+// ==========================
+// FONDO
+// ==========================
+
+const canvas =
+    document.getElementById("space");
+
+const ctx =
+    canvas.getContext("2d");
 
 let stars = [];
 
-for(let i=0;i<2000;i++){
-    stars.push({
-        x:(Math.random()-0.5)*2000,
-        y:(Math.random()-0.5)*2000,
-        z:Math.random()*2000
-    });
+function resize(){
+
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+
 }
 
-function draw(){
-    ctx.fillStyle="rgba(0,0,0,0.3)";
-    ctx.fillRect(0,0,canvas.width,canvas.height);
+resize();
 
-    for(let s of stars){
-        s.z -= 10;
+window.addEventListener(
+    "resize",
+    resize
+);
 
-        if(s.z<=0){
-            s.z=2000;
+for(let i=0;i<120;i++){
+
+    stars.push({
+
+        x:Math.random()*innerWidth,
+
+        y:Math.random()*innerHeight,
+
+        speed:
+            Math.random()*.7+.1
+
+    });
+
+}
+
+function animate(){
+
+    ctx.fillStyle =
+        "rgba(3,7,10,.25)";
+
+    ctx.fillRect(
+        0,0,
+        canvas.width,
+        canvas.height
+    );
+
+    ctx.fillStyle =
+        "#00eaff";
+
+    stars.forEach(s=>{
+
+        ctx.fillRect(
+            s.x,
+            s.y,
+            1.5,
+            1.5
+        );
+
+        s.y += s.speed;
+
+        if(s.y > canvas.height){
+
+            s.y = 0;
+
+            s.x =
+                Math.random()*canvas.width;
+
         }
 
-        let x = (s.x/s.z)*800 + canvas.width/2;
-        let y = (s.y/s.z)*800 + canvas.height/2;
+    });
 
-        let size = (1-s.z/2000)*5;
+    requestAnimationFrame(animate);
 
-        ctx.fillStyle="cyan";
-        ctx.beginPath();
-        ctx.arc(x,y,size,0,Math.PI*2);
-        ctx.fill();
-    }
-
-    requestAnimationFrame(draw);
 }
 
-draw();
+animate();
 
-function boom(){
-
-    document.body.style.background="white";
-
-    setTimeout(()=>{
-        document.body.style.background="black";
-    },100);
-
-    for(let i=0;i<500;i++){
-        stars.push({
-            x:(Math.random()-0.5)*2000,
-            y:(Math.random()-0.5)*2000,
-            z:Math.random()*500
-        });
-    }
-
-    document.querySelector("h1").innerText="🌀 VIAJANDO...";
-}
 </script>
 
 </body>
