@@ -3,103 +3,270 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contador - La Papa / 10000</title>
+    <title>La Papa / 10.000</title>
     <style>
         * { box-sizing: border-box; }
         body {
             margin: 0;
+            padding: 20px;
             font-family: Arial, sans-serif;
-            background: #111;
+            background: #0f172a;
             color: white;
-            padding: 24px;
         }
         .contenedor {
-            width: 100%;
-            max-width: 700px;
-            margin: 30px auto;
-            background: #1d1d1d;
+            max-width: 760px;
+            margin: auto;
+            background: #111827;
             padding: 24px;
             border-radius: 20px;
         }
-        h1 { text-align: center; }
-        .jugador {
-            background: #292929;
-            padding: 18px;
-            margin: 14px 0;
-            border-radius: 16px;
+        h1, h2 { text-align: center; }
+        .jugadores {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
         }
-        .nombre {
+        .jugador {
+            background: #1f2937;
+            padding: 16px;
+            border-radius: 16px;
+            text-align: center;
+        }
+        input, select, button {
+            font: inherit;
+        }
+        .nombre, select {
             width: 100%;
             padding: 10px;
+            border: 1px solid #475569;
             border-radius: 10px;
-            border: 1px solid #555;
-            background: #111;
+            background: #0f172a;
             color: white;
-            font-size: 16px;
         }
         .puntos {
-            font-size: 42px;
-            text-align: center;
-            margin: 12px 0;
+            font-size: 38px;
             font-weight: bold;
-            color: #00d9ff;
+            color: #22d3ee;
+            margin: 12px 0;
+        }
+        .activo {
+            outline: 2px solid #22d3ee;
+        }
+        .seccion {
+            margin-top: 18px;
+            padding: 18px;
+            background: #1f2937;
+            border-radius: 16px;
+        }
+        .dados {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin: 12px 0;
         }
         button {
-            padding: 10px 16px;
-            margin: 4px;
-            border: none;
+            padding: 11px 14px;
+            border: 0;
             border-radius: 10px;
             cursor: pointer;
             font-weight: bold;
+            margin: 4px;
         }
-        .botones { text-align: center; }
-        .sumar { background: #00d9ff; color: #000; }
-        .restar { background: #444; color: white; }
-        .reiniciar { background: #cfcfcf; color: #111; width: 100%; margin-top: 12px; }
+        .principal { background: #22d3ee; color: #061018; }
+        .secundario { background: #334155; color: white; }
+        .peligro { background: #7f1d1d; color: white; }
+        .turno {
+            text-align: center;
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        .resultado {
+            text-align: center;
+            font-size: 24px;
+            color: #22d3ee;
+            font-weight: bold;
+        }
+        .mensaje {
+            text-align: center;
+            min-height: 24px;
+            margin: 10px 0;
+        }
+        @media (max-width: 600px) {
+            .jugadores, .dados { grid-template-columns: 1fr; }
+            .dados { grid-template-columns: repeat(5, 1fr); }
+        }
     </style>
 </head>
 <body>
-    <main class="contenedor">
-        <h1>🎲 La Papa / 10000</h1>
+<main class="contenedor">
+    <h1>🥔 La Papa / 10.000</h1>
 
-        <div class="jugador">
-            <input class="nombre" value="Jugador 1" aria-label="Nombre del jugador 1">
+    <div class="jugadores">
+        <section class="jugador activo" id="jugador1">
+            <input class="nombre" id="nombre1" value="Jugador 1">
             <div class="puntos" id="puntos1">0</div>
-            <div class="botones">
-                <button class="sumar" onclick="cambiar(1, 100)">+100</button>
-                <button class="sumar" onclick="cambiar(1, 500)">+500</button>
-                <button class="sumar" onclick="cambiar(1, 1000)">+1000</button>
-                <button class="restar" onclick="cambiar(1, -100)">-100</button>
-            </div>
-        </div>
-
-        <div class="jugador">
-            <input class="nombre" value="Jugador 2" aria-label="Nombre del jugador 2">
+        </section>
+        <section class="jugador" id="jugador2">
+            <input class="nombre" id="nombre2" value="Jugador 2">
             <div class="puntos" id="puntos2">0</div>
-            <div class="botones">
-                <button class="sumar" onclick="cambiar(2, 100)">+100</button>
-                <button class="sumar" onclick="cambiar(2, 500)">+500</button>
-                <button class="sumar" onclick="cambiar(2, 1000)">+1000</button>
-                <button class="restar" onclick="cambiar(2, -100)">-100</button>
-            </div>
+        </section>
+    </div>
+
+    <section class="seccion">
+        <div class="turno" id="turno">Turno de Jugador 1</div>
+        <h2>🎲 Tirada</h2>
+        <div class="dados">
+            <select class="dado"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select>
+            <select class="dado"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select>
+            <select class="dado"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select>
+            <select class="dado"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select>
+            <select class="dado"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select>
         </div>
+        <div class="resultado" id="resultado">Puntaje de la tirada: 0</div>
+        <div class="mensaje" id="mensaje"></div>
+        <div style="text-align:center">
+            <button class="principal" onclick="calcularTirada()">Calcular tirada</button>
+            <button class="secundario" onclick="plantarse()">Plantarse y anotar</button>
+            <button class="peligro" onclick="papa()">🥔 ¡PAPA!</button>
+        </div>
+    </section>
 
-        <button class="reiniciar" onclick="reiniciar()">Reiniciar contador</button>
-    </main>
+    <section class="seccion">
+        <div style="text-align:center">
+            <strong>Puntaje del turno: </strong><span id="puntajeTurno">0</span>
+            <br><br>
+            <button class="secundario" onclick="pasarTurno()">Pasar turno</button>
+            <button class="peligro" onclick="reiniciar()">Reiniciar partida</button>
+        </div>
+    </section>
+</main>
 
-    <script>
-        let puntos = [0, 0];
+<script>
+    const dados = document.querySelectorAll('.dado');
+    let puntos = [0, 0];
+    let jugadorActual = 0;
+    let turnoPuntos = 0;
+    let yaEntro = [false, false];
 
-        function cambiar(jugador, cantidad) {
-            puntos[jugador - 1] += cantidad;
-            document.getElementById('puntos' + jugador).textContent = puntos[jugador - 1];
+    function nombre() {
+        return document.getElementById('nombre' + (jugadorActual + 1)).value || ('Jugador ' + (jugadorActual + 1));
+    }
+
+    function calcularPuntaje(valores) {
+        const cuenta = [0, 0, 0, 0, 0, 0, 0];
+        valores.forEach(v => cuenta[v]++);
+        let puntaje = 0;
+
+        // Escalera de 1 a 5 o de 2 a 6: 500 puntos.
+        if (valores.length === 5 &&
+            ((cuenta[1] && cuenta[2] && cuenta[3] && cuenta[4] && cuenta[5]) ||
+             (cuenta[2] && cuenta[3] && cuenta[4] && cuenta[5] && cuenta[6]))) {
+            return 500;
         }
 
-        function reiniciar() {
-            puntos = [0, 0];
-            document.getElementById('puntos1').textContent = '0';
-            document.getElementById('puntos2').textContent = '0';
+        // Tríos. Se cuentan por tirada, sin mezclar dados de tiradas distintas.
+        for (let n = 1; n <= 6; n++) {
+            if (cuenta[n] >= 3) {
+                puntaje += n === 1 ? 1000 : n * 100;
+                if (cuenta[n] === 4) puntaje += n === 1 ? 1000 : n * 100;
+                if (cuenta[n] === 5) puntaje += n === 1 ? 1000 : n * 100;
+            }
         }
-    </script>
+
+        // Unos y cincos que no forman parte de un trío.
+        if (cuenta[1] < 3) puntaje += cuenta[1] * 100;
+        if (cuenta[5] < 3) puntaje += cuenta[5] * 50;
+
+        return puntaje;
+    }
+
+    function calcularTirada() {
+        const valores = [...dados].map(d => Number(d.value));
+        const puntosTirada = calcularPuntaje(valores);
+        document.getElementById('resultado').textContent = 'Puntaje de la tirada: ' + puntosTirada;
+
+        if (puntosTirada === 0) {
+            document.getElementById('mensaje').textContent = 'No hay combinación que puntúe: perdés los puntos del turno.';
+            return;
+        }
+
+        turnoPuntos += puntosTirada;
+        document.getElementById('puntajeTurno').textContent = turnoPuntos;
+        document.getElementById('mensaje').textContent = 'Sumaste ' + puntosTirada + ' al turno. Podés seguir o plantarte.';
+
+        if (valores.every(v => v === 1 || v === 5 || valores.filter(x => x === v).length >= 3)) {
+            document.getElementById('mensaje').textContent += ' ¡Los 5 dados puntúan! Podés volver a tirar los 5.';
+        }
+    }
+
+    function plantarse() {
+        if (turnoPuntos === 0) {
+            document.getElementById('mensaje').textContent = 'Primero necesitás conseguir puntos en el turno.';
+            return;
+        }
+
+        if (!yaEntro[jugadorActual]) {
+            if (turnoPuntos < 750) {
+                document.getElementById('mensaje').textContent = 'Necesitás al menos 750 puntos en un solo turno para empezar a anotar.';
+                return;
+            }
+            yaEntro[jugadorActual] = true;
+        }
+
+        puntos[jugadorActual] += turnoPuntos;
+        actualizarMarcador();
+
+        if (puntos[jugadorActual] >= 5000) {
+            document.getElementById('mensaje').textContent = nombre() + ' llegó a 5000 y gana la partida. 🏆';
+            document.querySelectorAll('button').forEach(b => b.disabled = true);
+            return;
+        }
+
+        pasarTurno();
+    }
+
+    function papa() {
+        turnoPuntos = 0;
+        document.getElementById('puntajeTurno').textContent = '0';
+        document.getElementById('resultado').textContent = 'Puntaje de la tirada: 0';
+        document.getElementById('mensaje').textContent = '¡PAPA! Perdés todo lo acumulado en este turno.';
+        cambiarJugador();
+    }
+
+    function pasarTurno() {
+        turnoPuntos = 0;
+        document.getElementById('puntajeTurno').textContent = '0';
+        document.getElementById('resultado').textContent = 'Puntaje de la tirada: 0';
+        document.getElementById('mensaje').textContent = '';
+        cambiarJugador();
+    }
+
+    function cambiarJugador() {
+        jugadorActual = jugadorActual === 0 ? 1 : 0;
+        document.getElementById('jugador1').classList.toggle('activo', jugadorActual === 0);
+        document.getElementById('jugador2').classList.toggle('activo', jugadorActual === 1);
+        document.getElementById('turno').textContent = 'Turno de ' + nombre();
+    }
+
+    function actualizarMarcador() {
+        document.getElementById('puntos1').textContent = puntos[0];
+        document.getElementById('puntos2').textContent = puntos[1];
+    }
+
+    function reiniciar() {
+        puntos = [0, 0];
+        yaEntro = [false, false];
+        jugadorActual = 0;
+        turnoPuntos = 0;
+        actualizarMarcador();
+        document.getElementById('puntajeTurno').textContent = '0';
+        document.getElementById('resultado').textContent = 'Puntaje de la tirada: 0';
+        document.getElementById('mensaje').textContent = '';
+        document.getElementById('turno').textContent = 'Turno de ' + nombre();
+        document.getElementById('jugador1').classList.add('activo');
+        document.getElementById('jugador2').classList.remove('activo');
+        document.querySelectorAll('button').forEach(b => b.disabled = false);
+    }
+</script>
 </body>
 </html>
