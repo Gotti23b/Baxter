@@ -6,95 +6,26 @@
     <title>La Papa / 10.000</title>
     <style>
         * { box-sizing: border-box; }
-        body {
-            margin: 0;
-            padding: 20px;
-            font-family: Arial, sans-serif;
-            background: #0f172a;
-            color: white;
-        }
-        .contenedor {
-            max-width: 760px;
-            margin: auto;
-            background: #111827;
-            padding: 24px;
-            border-radius: 20px;
-        }
+        body { margin: 0; padding: 20px; font-family: Arial, sans-serif; background: #0f172a; color: white; }
+        .contenedor { max-width: 760px; margin: auto; background: #111827; padding: 24px; border-radius: 20px; }
         h1, h2 { text-align: center; }
-        .jugadores {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 14px;
-        }
-        .jugador {
-            background: #1f2937;
-            padding: 16px;
-            border-radius: 16px;
-            text-align: center;
-        }
-        input, select, button {
-            font: inherit;
-        }
-        .nombre, select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #475569;
-            border-radius: 10px;
-            background: #0f172a;
-            color: white;
-        }
-        .puntos {
-            font-size: 38px;
-            font-weight: bold;
-            color: #22d3ee;
-            margin: 12px 0;
-        }
-        .activo {
-            outline: 2px solid #22d3ee;
-        }
-        .seccion {
-            margin-top: 18px;
-            padding: 18px;
-            background: #1f2937;
-            border-radius: 16px;
-        }
-        .dados {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 8px;
-            margin: 12px 0;
-        }
-        button {
-            padding: 11px 14px;
-            border: 0;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: bold;
-            margin: 4px;
-        }
+        .jugadores { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+        .jugador { background: #1f2937; padding: 16px; border-radius: 16px; text-align: center; }
+        input, select, button { font: inherit; }
+        .nombre, select { width: 100%; padding: 10px; border: 1px solid #475569; border-radius: 10px; background: #0f172a; color: white; }
+        .puntos { font-size: 38px; font-weight: bold; color: #22d3ee; margin: 12px 0; }
+        .activo { outline: 2px solid #22d3ee; }
+        .seccion { margin-top: 18px; padding: 18px; background: #1f2937; border-radius: 16px; }
+        .dados { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 12px 0; }
+        button { padding: 11px 14px; border: 0; border-radius: 10px; cursor: pointer; font-weight: bold; margin: 4px; }
         .principal { background: #22d3ee; color: #061018; }
         .secundario { background: #334155; color: white; }
         .peligro { background: #7f1d1d; color: white; }
-        .turno {
-            text-align: center;
-            font-size: 18px;
-            margin: 10px 0;
-        }
-        .resultado {
-            text-align: center;
-            font-size: 24px;
-            color: #22d3ee;
-            font-weight: bold;
-        }
-        .mensaje {
-            text-align: center;
-            min-height: 24px;
-            margin: 10px 0;
-        }
-        @media (max-width: 600px) {
-            .jugadores, .dados { grid-template-columns: 1fr; }
-            .dados { grid-template-columns: repeat(5, 1fr); }
-        }
+        .turno, .resultado, .mensaje { text-align: center; }
+        .turno { font-size: 18px; margin: 10px 0; }
+        .resultado { font-size: 24px; color: #22d3ee; font-weight: bold; }
+        .mensaje { min-height: 24px; margin: 10px 0; }
+        @media (max-width: 600px) { .jugadores { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -114,7 +45,7 @@
 
     <section class="seccion">
         <div class="turno" id="turno">Turno de Jugador 1</div>
-        <h2>🎲 Tirada</h2>
+        <h2>🎲 Tirada de 5 dados</h2>
         <div class="dados">
             <select class="dado"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select>
             <select class="dado"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select>
@@ -157,27 +88,38 @@
         valores.forEach(v => cuenta[v]++);
         let puntaje = 0;
 
-        // Escalera de 1 a 5 o de 2 a 6: 500 puntos.
-        if (valores.length === 5 &&
-            ((cuenta[1] && cuenta[2] && cuenta[3] && cuenta[4] && cuenta[5]) ||
-             (cuenta[2] && cuenta[3] && cuenta[4] && cuenta[5] && cuenta[6]))) {
+        // En esta versión de La Papa, una escalera de 5 dados vale 500.
+        if ((cuenta[1] && cuenta[2] && cuenta[3] && cuenta[4] && cuenta[5]) ||
+            (cuenta[2] && cuenta[3] && cuenta[4] && cuenta[5] && cuenta[6])) {
             return 500;
         }
 
-        // Tríos. Se cuentan por tirada, sin mezclar dados de tiradas distintas.
+        // Un trío cuenta una sola vez por cada número.
         for (let n = 1; n <= 6; n++) {
             if (cuenta[n] >= 3) {
                 puntaje += n === 1 ? 1000 : n * 100;
-                if (cuenta[n] === 4) puntaje += n === 1 ? 1000 : n * 100;
-                if (cuenta[n] === 5) puntaje += n === 1 ? 1000 : n * 100;
             }
         }
 
-        // Unos y cincos que no forman parte de un trío.
+        // Los unos y cincos que no forman parte de un trío también puntúan.
         if (cuenta[1] < 3) puntaje += cuenta[1] * 100;
         if (cuenta[5] < 3) puntaje += cuenta[5] * 50;
 
         return puntaje;
+    }
+
+    function todosPuntuan(valores) {
+        const cuenta = [0, 0, 0, 0, 0, 0, 0];
+        valores.forEach(v => cuenta[v]++);
+        if (valores.length === 5 &&
+            ((cuenta[1] && cuenta[2] && cuenta[3] && cuenta[4] && cuenta[5]) ||
+             (cuenta[2] && cuenta[3] && cuenta[4] && cuenta[5] && cuenta[6]))) return true;
+        let puntuantes = 0;
+        for (let n = 1; n <= 6; n++) {
+            if (cuenta[n] >= 3) puntuantes += 3;
+            if (n === 1 || n === 5) puntuantes += Math.max(0, cuenta[n] - 3);
+        }
+        return puntuantes === 5;
     }
 
     function calcularTirada() {
@@ -186,7 +128,10 @@
         document.getElementById('resultado').textContent = 'Puntaje de la tirada: ' + puntosTirada;
 
         if (puntosTirada === 0) {
-            document.getElementById('mensaje').textContent = 'No hay combinación que puntúe: perdés los puntos del turno.';
+            document.getElementById('mensaje').textContent = '¡PAPA! No salió ningún 1, 5, trío ni escalera. Perdés el turno.';
+            turnoPuntos = 0;
+            document.getElementById('puntajeTurno').textContent = '0';
+            cambiarJugador();
             return;
         }
 
@@ -194,25 +139,23 @@
         document.getElementById('puntajeTurno').textContent = turnoPuntos;
         document.getElementById('mensaje').textContent = 'Sumaste ' + puntosTirada + ' al turno. Podés seguir o plantarte.';
 
-        if (valores.every(v => v === 1 || v === 5 || valores.filter(x => x === v).length >= 3)) {
+        if (todosPuntuan(valores)) {
             document.getElementById('mensaje').textContent += ' ¡Los 5 dados puntúan! Podés volver a tirar los 5.';
         }
     }
 
     function plantarse() {
         if (turnoPuntos === 0) {
-            document.getElementById('mensaje').textContent = 'Primero necesitás conseguir puntos en el turno.';
+            document.getElementById('mensaje').textContent = 'Primero conseguí puntos en el turno.';
             return;
         }
-
         if (!yaEntro[jugadorActual]) {
             if (turnoPuntos < 750) {
-                document.getElementById('mensaje').textContent = 'Necesitás al menos 750 puntos en un solo turno para empezar a anotar.';
+                document.getElementById('mensaje').textContent = 'Para empezar a anotar necesitás 750 puntos o más en un solo turno.';
                 return;
             }
             yaEntro[jugadorActual] = true;
         }
-
         puntos[jugadorActual] += turnoPuntos;
         actualizarMarcador();
 
@@ -221,7 +164,6 @@
             document.querySelectorAll('button').forEach(b => b.disabled = true);
             return;
         }
-
         pasarTurno();
     }
 
