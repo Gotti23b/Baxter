@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador - La Papa / 10000</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #111;
+            color: white;
+            padding: 24px;
+        }
+        .contenedor {
+            width: 100%;
+            max-width: 700px;
+            margin: 30px auto;
+            background: #1d1d1d;
+            padding: 24px;
+            border-radius: 20px;
+        }
+        h1 { text-align: center; }
+        .jugador {
+            background: #292929;
+            padding: 18px;
+            margin: 14px 0;
+            border-radius: 16px;
+        }
+        .nombre {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #555;
+            background: #111;
+            color: white;
+            font-size: 16px;
+        }
+        .puntos {
+            font-size: 42px;
+            text-align: center;
+            margin: 12px 0;
+            font-weight: bold;
+            color: #00d9ff;
+        }
+        button {
+            padding: 10px 16px;
+            margin: 4px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .botones { text-align: center; }
+        .sumar { background: #00d9ff; color: #000; }
+        .restar { background: #444; color: white; }
+        .reiniciar { background: #cfcfcf; color: #111; width: 100%; margin-top: 12px; }
+    </style>
+</head>
+<body>
+    <main class="contenedor">
+        <h1>🎲 La Papa / 10000</h1>
+
+        <div class="jugador">
+            <input class="nombre" value="Jugador 1" aria-label="Nombre del jugador 1">
+            <div class="puntos" id="puntos1">0</div>
+            <div class="botones">
+                <button class="sumar" onclick="cambiar(1, 100)">+100</button>
+                <button class="sumar" onclick="cambiar(1, 500)">+500</button>
+                <button class="sumar" onclick="cambiar(1, 1000)">+1000</button>
+                <button class="restar" onclick="cambiar(1, -100)">-100</button>
+            </div>
+        </div>
+
+        <div class="jugador">
+            <input class="nombre" value="Jugador 2" aria-label="Nombre del jugador 2">
+            <div class="puntos" id="puntos2">0</div>
+            <div class="botones">
+                <button class="sumar" onclick="cambiar(2, 100)">+100</button>
+                <button class="sumar" onclick="cambiar(2, 500)">+500</button>
+                <button class="sumar" onclick="cambiar(2, 1000)">+1000</button>
+                <button class="restar" onclick="cambiar(2, -100)">-100</button>
+            </div>
+        </div>
+
+        <button class="reiniciar" onclick="reiniciar()">Reiniciar contador</button>
+    </main>
+
+    <script>
+        let puntos = [0, 0];
+
+        function cambiar(jugador, cantidad) {
+            puntos[jugador - 1] += cantidad;
+            document.getElementById('puntos' + jugador).textContent = puntos[jugador - 1];
+        }
+
+        function reiniciar() {
+            puntos = [0, 0];
+            document.getElementById('puntos1').textContent = '0';
+            document.getElementById('puntos2').textContent = '0';
+        }
+    </script>
+</body>
+</html>
