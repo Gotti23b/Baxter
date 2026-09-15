@@ -5,113 +5,68 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Generala</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#111;color:#fff;padding:20px}
-.contenedor{max-width:850px;margin:20px auto;background:#1d1d1d;padding:24px;border-radius:20px}
-h1{text-align:center}
-label{display:block;margin:10px 0 6px;font-weight:bold}
-.dados-box{background:#292929;padding:16px;border-radius:14px;margin-bottom:20px}
-#dados{width:100%;padding:14px;border-radius:10px;border:1px solid #555;background:#111;color:#fff;font-size:20px;text-align:center}
-button{border:0;border-radius:10px;padding:12px 16px;font-weight:bold;cursor:pointer;margin-top:10px}
-.calcular{width:100%;background:#00d9ff;color:#000}
-.mensaje{text-align:center;margin-top:10px;min-height:22px}
-.resultados{display:grid;grid-template-columns:1fr 120px;gap:8px;margin-top:14px}
-.resultados div{padding:10px;border-radius:8px;background:#111}
-.resultados .valor{text-align:center;font-weight:bold;color:#00d9ff}
-.tablero{margin-top:22px}
-.fila{display:grid;grid-template-columns:1fr 100px;gap:8px;margin:7px 0}
-.fila input{width:100%;padding:10px;border-radius:9px;border:1px solid #555;background:#111;color:#fff}
-.fila input[type=number]{text-align:center}
-.total{margin-top:18px;padding:16px;background:#292929;border-radius:14px;text-align:center;font-size:28px;font-weight:bold;color:#00d9ff}
-.reiniciar{width:100%;margin-top:14px;background:#00d9ff;color:#000}
-@media(max-width:500px){.contenedor{padding:16px}.resultados{grid-template-columns:1fr 90px}}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#111;color:#fff;padding:20px}.contenedor{max-width:900px;margin:20px auto;background:#1d1d1d;padding:24px;border-radius:20px}h1{text-align:center}.jugadores{display:grid;grid-template-columns:1fr 1fr;gap:14px}.jugador{background:#292929;padding:16px;border-radius:14px}.jugador h2{text-align:center;color:#00d9ff}.nombre{width:100%;padding:10px;border-radius:9px;border:1px solid #555;background:#111;color:#fff;margin-bottom:12px}.dados{width:100%;padding:12px;border-radius:9px;border:1px solid #555;background:#111;color:#fff;font-size:18px}.calcular{width:100%;margin-top:10px;padding:11px;border:0;border-radius:10px;background:#00d9ff;color:#000;font-weight:bold;cursor:pointer}.tablero{margin-top:20px;overflow-x:auto}.fila{display:grid;grid-template-columns:1fr 100px 100px;gap:8px;margin:7px 0;align-items:center}.fila input{width:100%;padding:10px;border-radius:9px;border:1px solid #555;background:#111;color:#fff;text-align:center}.total{margin-top:18px;padding:16px;background:#292929;border-radius:14px;text-align:center;font-size:28px;font-weight:bold;color:#00d9ff}.reiniciar{width:100%;margin-top:14px;padding:12px;border:0;border-radius:10px;background:#00d9ff;color:#000;font-weight:bold;cursor:pointer}.encabezado{font-weight:bold;text-align:center}@media(max-width:650px){.jugadores{grid-template-columns:1fr}.fila{grid-template-columns:1fr 85px 85px}}
 </style>
 </head>
 <body>
 <main class="contenedor">
 <h1>🎲 Generala</h1>
-
-<div class="dados-box">
-<label for="dados">Poné los 5 dados</label>
-<input id="dados" inputmode="numeric" placeholder="Ej: 1 2 3 4 5">
-<button class="calcular" onclick="calcularDados()">Calcular jugada</button>
-<div id="mensaje" class="mensaje"></div>
-<div id="resultados" class="resultados" style="display:none"></div>
+<div class="jugadores">
+<div class="jugador">
+<h2>Jugador 1</h2>
+<input id="nombre1" class="nombre" value="Jugador 1">
+<input id="dados1" class="dados" placeholder="Ej: 1 2 3 4 5">
+<button class="calcular" onclick="calcular(1)">Calcular jugada</button>
 </div>
-
-<label>Jugador</label>
-<input id="nombre" value="Jugador 1" style="width:100%;padding:10px;border-radius:9px;border:1px solid #555;background:#111;color:#fff">
-
+<div class="jugador">
+<h2>Jugador 2</h2>
+<input id="nombre2" class="nombre" value="Jugador 2">
+<input id="dados2" class="dados" placeholder="Ej: 1 2 3 4 5">
+<button class="calcular" onclick="calcular(2)">Calcular jugada</button>
+</div>
+</div>
 <div class="tablero">
-<label>Completá los puntos de cada categoría</label>
-<div class="fila"><span>1</span><input type="number" min="0" value="0" class="punto"></div>
-<div class="fila"><span>2</span><input type="number" min="0" value="0" class="punto"></div>
-<div class="fila"><span>3</span><input type="number" min="0" value="0" class="punto"></div>
-<div class="fila"><span>4</span><input type="number" min="0" value="0" class="punto"></div>
-<div class="fila"><span>5</span><input type="number" min="0" value="0" class="punto"></div>
-<div class="fila"><span>6</span><input type="number" min="0" value="0" class="punto"></div>
-<div class="fila"><span>Escalera</span><input type="number" min="0" value="0" class="punto"></div>
-<div class="fila"><span>Full</span><input type="number" min="0" value="0" class="punto"></div>
-<div class="fila"><span>Póker</span><input type="number" min="0" value="0" class="punto"></div>
-<div class="fila"><span>Generala</span><input type="number" min="0" value="0" class="punto"></div>
-<div class="fila"><span>Generala doble</span><input type="number" min="0" value="0" class="punto"></div>
+<div class="fila encabezado"><span>Categoría</span><span>Jugador 1</span><span>Jugador 2</span></div>
+<div class="fila"><span>1</span><input id="j1_1" type="number" min="0" value="0"><input id="j2_1" type="number" min="0" value="0"></div>
+<div class="fila"><span>2</span><input id="j1_2" type="number" min="0" value="0"><input id="j2_2" type="number" min="0" value="0"></div>
+<div class="fila"><span>3</span><input id="j1_3" type="number" min="0" value="0"><input id="j2_3" type="number" min="0" value="0"></div>
+<div class="fila"><span>4</span><input id="j1_4" type="number" min="0" value="0"><input id="j2_4" type="number" min="0" value="0"></div>
+<div class="fila"><span>5</span><input id="j1_5" type="number" min="0" value="0"><input id="j2_5" type="number" min="0" value="0"></div>
+<div class="fila"><span>6</span><input id="j1_6" type="number" min="0" value="0"><input id="j2_6" type="number" min="0" value="0"></div>
+<div class="fila"><span>Escalera</span><input id="j1_escalera" type="number" min="0" value="0"><input id="j2_escalera" type="number" min="0" value="0"></div>
+<div class="fila"><span>Full</span><input id="j1_full" type="number" min="0" value="0"><input id="j2_full" type="number" min="0" value="0"></div>
+<div class="fila"><span>Póker</span><input id="j1_poker" type="number" min="0" value="0"><input id="j2_poker" type="number" min="0" value="0"></div>
+<div class="fila"><span>Generala</span><input id="j1_generala" type="number" min="0" value="0"><input id="j2_generala" type="number" min="0" value="0"></div>
+<div class="fila"><span>Generala doble</span><input id="j1_doble" type="number" min="0" value="0"><input id="j2_doble" type="number" min="0" value="0"></div>
+<div class="fila"><span>Chance</span><input id="j1_chance" type="number" min="0" value="0"><input id="j2_chance" type="number" min="0" value="0"></div>
 </div>
-
-<div class="total">Total: <span id="total">0</span></div>
+<div class="total">Total: <span id="total1">0</span> — <span id="total2">0</span></div>
 <button class="reiniciar" onclick="reiniciar()">Reiniciar partida</button>
 </main>
 <script>
-const inputs=document.querySelectorAll('.punto');
-
-function actualizar(){
- let total=0;
- inputs.forEach(i=>total+=Number(i.value)||0);
- document.getElementById('total').textContent=total;
-}
-inputs.forEach(i=>i.addEventListener('input',actualizar));
-
-function calcularDados(){
- const texto=document.getElementById('dados').value.trim();
- const dados=texto.split(/[\s,;]+/).filter(Boolean).map(Number);
- const mensaje=document.getElementById('mensaje');
- const resultados=document.getElementById('resultados');
-
- if(dados.length!==5 || dados.some(d=>!Number.isInteger(d)||d<1||d>6)){
-   mensaje.textContent='⚠️ Poné exactamente 5 dados, del 1 al 6. Ej: 1 2 3 4 5';
-   resultados.style.display='none';
-   return;
- }
-
- const c=[0,0,0,0,0,0,0];
- dados.forEach(d=>c[d]++);
- const escalera=(dados.slice().sort((a,b)=>a-b).join('')==='12345'||dados.slice().sort((a,b)=>a-b).join('')==='23456');
- const full=Object.values(c).includes(3)&&Object.values(c).includes(2);
- const poker=Object.values(c).includes(4);
- const generala=Object.values(c).includes(5);
- const suma=n=>dados.filter(d=>d===n).reduce((a,b)=>a+b,0);
-
- const valores=[
-   suma(1),suma(2),suma(3),suma(4),suma(5),suma(6),
-   escalera?20:0,
-   full?30:0,
-   poker?40:0,
-   generala?50:0,
-   generala?100:0
- ];
-
- const nombres=['1','2','3','4','5','6','Escalera','Full','Póker','Generala','Generala doble'];
- resultados.innerHTML=nombres.map((n,i)=>`<div>${n}</div><div class="valor">${valores[i]}</div>`).join('');
- resultados.style.display='grid';
- mensaje.textContent=generala?'🎉 ¡Generala!':full?'🎲 ¡Full!':poker?'🎲 ¡Póker!':escalera?'🎲 ¡Escalera!':'✅ Dados calculados';
-}
-
-function reiniciar(){
- document.getElementById('dados').value='';
- document.getElementById('mensaje').textContent='';
- document.getElementById('resultados').style.display='none';
- inputs.forEach(i=>i.value=0);
+const categorias=['1','2','3','4','5','6','escalera','full','poker','generala','doble','chance'];
+function obtenerDados(n){return document.getElementById('dados'+n).value.trim().split(/\s+/).map(Number).filter(x=>Number.isInteger(x)&&x>=1&&x<=6)}
+function calcular(n){
+ const d=obtenerDados(n); if(d.length!==5){alert('Ingresá exactamente 5 dados, por ejemplo: 1 2 3 4 5');return}
+ const c=[0,0,0,0,0,0,0]; d.forEach(x=>c[x]++);
+ for(let i=1;i<=6;i++) document.getElementById('j'+n+'_'+i).value=c[i]*i;
+ const orden=d.slice().sort((a,b)=>a-b).join('');
+ const escalera=orden==='12345'||orden==='23456';
+ const full=c.includes(3)&&c.includes(2);
+ const poker=c.some(x=>x===4);
+ const generala=c.some(x=>x===5);
+ const chance=d.reduce((a,b)=>a+b,0);
+ document.getElementById('j'+n+'_escalera').value=escalera?20:0;
+ document.getElementById('j'+n+'_full').value=full?30:0;
+ document.getElementById('j'+n+'_poker').value=poker?40:0;
+ document.getElementById('j'+n+'_generala').value=generala?50:0;
+ document.getElementById('j'+n+'_doble').value=0;
+ document.getElementById('j'+n+'_chance').value=chance;
  actualizar();
 }
+function actualizar(){for(let n=1;n<=2;n++){let total=0;categorias.forEach(c=>{total+=Number(document.getElementById('j'+n+'_'+c).value)||0});document.getElementById('total'+n).textContent=total}}
+document.querySelectorAll('input[type=number]').forEach(i=>i.addEventListener('input',actualizar));
+function reiniciar(){document.querySelectorAll('input[type=number]').forEach(i=>i.value=0);document.getElementById('dados1').value='';document.getElementById('dados2').value='';actualizar()}
 </script>
 </body>
 </html>
